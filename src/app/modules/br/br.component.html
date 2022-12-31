@@ -1,0 +1,32 @@
+<div class="card">
+    <div class="flex justify-content-between">
+        <h5>Advanced search</h5>
+        <button pButton (click)="isCollapsed.advancedSearch = !isCollapsed.advancedSearch" [icon]="isCollapsed.advancedSearch ? 'pi pi-chevron-down' : 'pi pi-chevron-up' " class="p-button-text p-2"></button>
+    </div>
+    <div [@showHide]="isCollapsed.advancedSearch ? 'true' : 'false'" class="grid mt-2 formgroup-inline">
+        
+    </div>
+</div>
+
+<div class="card">
+    <div class="flex justify-content-between">
+        <button *ngIf="isCollapsed.list" pButton icon="pi pi-plus" label="Add Business Request"></button>
+        <p *ngIf="!isCollapsed.list"></p>
+        <button pButton (click)="isCollapsed.list = !isCollapsed.list" [icon]="isCollapsed.list ? 'pi pi-chevron-down' : 'pi pi-chevron-up' " class="p-button-text p-2"></button>
+    </div>
+    <div id="listBR" [@showHide]="isCollapsed.list ? 'true' : 'false'" class="flex justify-content-between">
+        <div class="col-12 p-0 mt-4 mb-2 lg:col-4 lg:mb-0">
+            <span class="p-input-icon-right">
+                <input type="text" pInputText placeholder="Search"/>
+                <i class="pi pi-search"></i>
+            </span>
+        </div>
+        <span class="p-buttonset mt-4">
+            <button pButton pRipple label="Save" icon="pi pi-check" class="border-white"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="border-white"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="border-white"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="border-white"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="bg-yellow-500 hover:bg-yellow-600 border-white"></button>
+        </span>
+    </div>
+</div>
