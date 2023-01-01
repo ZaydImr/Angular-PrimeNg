@@ -7,7 +7,11 @@ import { AddEditBrComponent } from './add-edit-br/add-edit-br.component';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CalendarModule } from 'primeng/calendar';
+import { TableModule } from 'primeng/table';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   declarations: [
@@ -19,7 +23,12 @@ import { InputTextModule } from 'primeng/inputtext';
     FormsModule,
     BrRoutingModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    MultiSelectModule,
+    CalendarModule,
+    TableModule,
+    DynamicDialogModule,
+    OverlayPanelModule
   ]
 })
 export class BrModule { }

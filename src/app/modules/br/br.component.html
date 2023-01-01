@@ -1,32 +1,123 @@
+<!-- Advanced search -->
 <div class="card">
-    <div class="flex justify-content-between">
-        <h5>Advanced search</h5>
-        <button pButton (click)="isCollapsed.advancedSearch = !isCollapsed.advancedSearch" [icon]="isCollapsed.advancedSearch ? 'pi pi-chevron-down' : 'pi pi-chevron-up' " class="p-button-text p-2"></button>
+    <div class="flex justify-content-between align-items-center">
+        <h5 class="mb-0">Advanced search</h5>
+        <button pButton (click)="isCollapsed.advancedSearch = !isCollapsed.advancedSearch"
+            [icon]="isCollapsed.advancedSearch ? 'pi pi-chevron-down' : 'pi pi-chevron-up' "
+            class="p-button-text p-2"></button>
     </div>
-    <div [@showHide]="isCollapsed.advancedSearch ? 'true' : 'false'" class="grid mt-2 formgroup-inline">
-        
+    <div [@showHide]="isCollapsed.advancedSearch ? 'true' : 'false'" class="grid p-fluid">
+        <div class="col-12 md:col-4 mb-0">
+            <span class="p-float-label">
+                <input type="text" pInputText>
+                <label>Request Number</label>
+            </span>
+        </div>
+        <div class="col-12 md:col-2 mb-0">
+            <span class="p-float-label">
+                <p-multiSelect [options]="frameworkContracts" [(ngModel)]="advancedSearch.status"
+                    placeholder="select a status" optionLabel="name" class="multiselect-custom"></p-multiSelect>
+                <label>Status</label>
+            </span>
+        </div>
+        <div class="col-12 md:col-2 mb-0">
+            <span class="p-float-label">
+                <p-multiSelect [options]="frameworkContracts" [(ngModel)]="advancedSearch.frameworkContract"
+                    placeholder="select a framework contract" optionLabel="name"
+                    class="multiselect-custom"></p-multiSelect>
+                <label>Framework contract</label>
+            </span>
+        </div>
+        <div class="col-12 md:col-2 mb-0">
+            <span class="p-float-label">
+                <p-calendar [(ngModel)]="advancedSearch.dtRfReceived" [showIcon]="true" inputId="icon"></p-calendar>
+                <label>RF received<span class="ml-2 text-red-500">*</span></label>
+            </span>
+        </div>
+        <div class="col-12 md:col-2 mb-0">
+            <button (click)="search()" pButton label="Search"></button>
+        </div>
     </div>
 </div>
 
+<!-- Table -->
 <div class="card">
     <div class="flex justify-content-between">
-        <button *ngIf="isCollapsed.list" pButton icon="pi pi-plus" label="Add Business Request"></button>
+        <button (click)="addEdit('add')" *ngIf="isCollapsed.list" pButton icon="pi pi-plus"
+            label="Add Business Request"></button>
         <p *ngIf="!isCollapsed.list"></p>
-        <button pButton (click)="isCollapsed.list = !isCollapsed.list" [icon]="isCollapsed.list ? 'pi pi-chevron-down' : 'pi pi-chevron-up' " class="p-button-text p-2"></button>
+        <button pButton (click)="isCollapsed.list = !isCollapsed.list"
+            [icon]="isCollapsed.list ? 'pi pi-chevron-down' : 'pi pi-chevron-up' " class="p-button-text p-2"></button>
     </div>
-    <div id="listBR" [@showHide]="isCollapsed.list ? 'true' : 'false'" class="flex justify-content-between">
-        <div class="col-12 p-0 mt-4 mb-2 lg:col-4 lg:mb-0">
-            <span class="p-input-icon-right">
-                <input type="text" pInputText placeholder="Search"/>
-                <i class="pi pi-search"></i>
+    <div id="listBR" [@showHide]="isCollapsed.list ? 'true' : 'false'">
+        <div class="flex justify-content-between mb-3">
+            <div></div>
+            <span class="p-buttonset">
+                <button (click)="addEdit('add')" pButton pRipple label="Add" icon="pi pi-plus" class="border-white"></button>
+                <button (click)="addEdit('edit')" pButton pRipple label="Edit" icon="pi pi-pencil"
+                    class="border-white"></button>
+                <button pButton pRipple label="Delete" icon="pi pi-trash" class="border-white"></button>
+                <button pButton pRipple label="History" icon="pi pi-history" class="border-white"></button>
+                <button pButton pRipple (click)="exportExcel()" label="Export All" icon="pi pi-trash"
+                    class="bg-yellow-500 hover:bg-yellow-600 border-white" [loading]="tableOptions.exportLoading"></button>
             </span>
         </div>
-        <span class="p-buttonset mt-4">
-            <button pButton pRipple label="Save" icon="pi pi-check" class="border-white"></button>
-            <button pButton pRipple label="Delete" icon="pi pi-trash" class="border-white"></button>
-            <button pButton pRipple label="Delete" icon="pi pi-trash" class="border-white"></button>
-            <button pButton pRipple label="Delete" icon="pi pi-trash" class="border-white"></button>
-            <button pButton pRipple label="Delete" icon="pi pi-trash" class="bg-yellow-500 hover:bg-yellow-600 border-white"></button>
-        </span>
+        <p-table #dtBR [value]="listBR" dataKey="id" [rows]="10" [loading]="tableOptions.loading" [rowHover]="true"
+            styleClass="p-datatable-gridlines" [paginator]="true"
+            [globalFilterFields]="globalFilterFields" responsiveLayout="scroll"
+            selectionMode="single" [(selection)]="selectedBR" >
+            <ng-template pTemplate="caption">
+                <div class="w-full flex justify-content-between">
+                    <span class="p-input-icon-right">
+                        <input (change)="onGlobalFilter(dtBR,$event)" type="text" pInputText placeholder="Search" />
+                        <i class="pi pi-search"></i>
+                    </span>
+                    <div>
+                        <button pButton (click)="clearFilter(dtBR)" label="Clear" class="p-button-outlined"
+                            icon="pi pi-filter-slash"></button>
+                        <button pButton (click)="opMenu.toggle($event)" class="p-button-outlined ml-2"
+                            icon="pi pi-bars"></button>
+                        <p-overlayPanel #opMenu [showCloseIcon]="true">
+                            <ng-template pTemplate>
+                                <span class="p-float-label mt-4">
+                                    <p-multiSelect #msVisible [options]="tableOptions.cols"
+                                        [(ngModel)]="tableOptions.visibleCols" placeholder="select visible columns"
+                                        optionLabel="label" class="multiselect-custom"></p-multiSelect>
+                                    <label>Visible columns</label>
+                                </span>
+                            </ng-template>
+                        </p-overlayPanel>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th *ngFor="let col of tableOptions.visibleCols">
+                        <div class="flex justify-content-between align-items-center">
+                            {{col.label}}
+                            <p-columnFilter type="text" field="name" display="menu"
+                                placeholder="Search by name"></p-columnFilter>
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-br>
+                <tr>
+                    <td *ngFor="let col of tableOptions.visibleCols">
+                        {{br[col.id]}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">No customers found.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading customers data. Please wait.</td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
 </div>
