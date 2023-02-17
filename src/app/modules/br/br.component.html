@@ -62,10 +62,12 @@
                     class="bg-yellow-500 hover:bg-yellow-600 border-white" [loading]="tableOptions.exportLoading"></button>
             </span>
         </div>
-        <p-table #dtBR [value]="listBR" dataKey="id" [rows]="10" [loading]="tableOptions.loading" [rowHover]="true"
+        <p-table #dtBR [value]="listBR" dataKey="id" [rows]="500" [loading]="tableOptions.loading" [rowHover]="true"
             styleClass="p-datatable-gridlines" [paginator]="true"
             [globalFilterFields]="globalFilterFields" responsiveLayout="scroll"
-            selectionMode="single" [(selection)]="selectedBR" >
+            selectionMode="single" [(selection)]="selectedBR" 
+            [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [rowsPerPageOptions]="[500,25,50]">
             <ng-template pTemplate="caption">
                 <div class="w-full flex justify-content-between">
                     <span class="p-input-icon-right">
